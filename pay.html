@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Nạp tiền</title>
+
+<style>
+body{background:#020617;color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
+.box{background:#1e293b;padding:20px;border-radius:15px;width:320px;text-align:center;}
+.copy{color:#22c55e;cursor:pointer;}
+button{width:100%;padding:10px;border:none;border-radius:10px;background:#22c55e;color:white;margin-top:10px;}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h3>💳 Nạp tiền</h3>
+
+<p>MB Bank</p>
+<p class="copy" onclick="copy('0588807300000')">0588807300000</p>
+<p>Chủ TK: Cao Minh Duy</p>
+
+<p>Nội dung:</p>
+<p id="nd" class="copy" onclick="copyND()"></p>
+
+<button onclick="paid()">Tôi đã thanh toán</button>
+</div>
+
+<script>
+let nd="MD"+Math.floor(100000+Math.random()*900000);
+nd.innerText=nd;
+
+function copy(t){navigator.clipboard.writeText(t);alert("Đã copy");}
+function copyND(){navigator.clipboard.writeText(nd);alert("Đã copy");}
+
+function paid(){
+let msg="Nạp tiền: "+nd;
+navigator.clipboard.writeText(msg);
+window.open("https://zalo.me/0328033706");
+alert("Mở zalo và dán gửi");
+}
+</script>
+
+</body>
+</html>
