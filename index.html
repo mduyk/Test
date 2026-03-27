@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Shop Proxy mduyk~</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Arial;background:#020617;color:white;}
+.auth{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#0008;}
+.auth-box{background:#1e293b;padding:25px;border-radius:15px;width:320px;text-align:center;}
+input,button{width:100%;padding:10px;margin:6px 0;border:none;border-radius:10px;}
+button{background:#22c55e;color:white;}
+#shop{display:none;}
+.container{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;padding:15px;}
+.box{background:#1e293b;padding:15px;border-radius:15px;text-align:center;}
+.price{color:#22c55e;}
+</style>
+</head>
+
+<body>
+
+<div class="auth" id="auth">
+<div class="auth-box">
+<h3>Đăng ký</h3>
+<input id="regUser">
+<input id="regPass" type="password">
+<button onclick="register()">Đăng ký</button>
+
+<h3>Đăng nhập</h3>
+<input id="logUser">
+<input id="logPass" type="password">
+<button onclick="login()">Đăng nhập</button>
+</div>
+</div>
+
+<div id="shop">
+
+<h2 style="text-align:center">🛒 Shop Proxy</h2>
+
+<h3 style="text-align:center">
+💰 Số dư: <span id="money">0</span>đ
+</h3>
+
+<div class="container">
+
+<div class="box">
+<h3>Proxy 2 Tuần</h3>
+<p class="price">50.000đ</p>
+<button onclick="buy(80000)">Mua</button>
+</div>
+
+<div class="box">
+<h3>Proxy Tháng</h3>
+<p class="price">80.000đ</p>
+<button onclick="buy(80000)">Mua</button>
+</div>
+
+<div class="box">
+<h3>Proxy 2 Tháng</h3>
+<p class="price">100.000đ</p>
+<button onclick="buy(100000)">Mua</button>
+</div>
+
+<div class="box">
+<h3>Proxy 3 Tháng</h3>
+<p class="price">150.000đ</p>
+<button onclick="buy(150000)">Mua</button>
+</div>
+
+<div class="box">
+<h3>Proxy Vĩnh viễn</h3>
+<p class="price">300.000đ</p>
+<button onclick="buy(300000)">Mua</button>
+</div>
+
+<div class="box">
+<h3>💳 Nạp tiền</h3>
+<button onclick="location.href='pay.html'">Nạp</button>
+</div>
+
+</div>
+
+<!-- nhập code -->
+<div style="text-align:center;margin:15px">
+<input id="code" placeholder="Nhập mã nạp">
+<button onclick="napCode()">Nạp tiền</button>
+</div>
+
+</div>
+
+<script>
+// ===== tiền =====
+const SECRET="mduyk";
+
+function setMoney(x){
+localStorage.setItem("money",btoa(x+"|"+SECRET));
+}
+function getMoney(){
+let d=localStorage.getItem("money");
+if(!d) return 0;
+d=atob(d);
+if(!d.includes(SECRET)) return 0;
+return parseInt(d.split("|")[0]);
+}
+function update(){money.innerText=getMoney();}
+
+// ===== login =====
+if(localStorage.getItem("user")){
+auth.style.display="none";
+shop.style.display="block";
+update();
+}
+
+function register(){
+localStorage.setItem("user",regUser.value);
+localStorage.setItem("pass",regPass.value);
+setMoney(0);
+alert("OK");
+}
+function login(){
+if(logUser.value==localStorage.getItem("user") &&
+logPass.value==localStorage.getItem("pass")){
+auth.style.display="none";
+shop.style.display="block";
+update();
+}else alert("Sai");
+}
+
+// ===== mua =====
+function buy(p){
+let m=getMoney();
+if(m<p) return alert("Không đủ tiền");
+setMoney(m-p);
+update();
+alert("Mua thành công");
+}
+
+// ===== 50 CODE =====
+let codes={
+"X9A2LmP8Q1":50000,"Q2Z8Mx1LA9":50000,"L8Q1Z9X2MA":50000,
+"P9X2L8M1ZA":100000,"Z1M2Q8L9XA":100000,"Q8X1Z2M9LA":100000,
+"M2Z9Q1L8XA":200000,"L9X1M2Q8ZA":200000,"Z8Q2L1M9XA":200000,
+"Q1M9Z2X8LA":500000,"X8Z1M2Q9LA":500000,"L2Q9Z1M8XA":500000,
+
+"ZQ8X2L9MA1":50000,"M1L9Q2X8ZA":50000,"X2Q8M1Z9LA":50000,
+"Q9M1X2L8ZA":100000,"L8Z2Q1M9XA":100000,"Z1X9L2Q8MA":100000,
+"M2Q1Z8X9LA":200000,"X9L2M1Q8ZA":200000,"Q2Z8X1M9LA":200000,
+"L1M9Q2Z8XA":500000,"Z8X2Q1M9LA":500000,"M9Q1Z2X8LA":500000,
+
+"X1L8M2Q9ZA":50000,"Q8M2X1Z9LA":50000,"L2Q9Z1M8XA":50000,
+"Z1M2L9Q8XA":100000,"M2X9Q1Z8LA":100000,"X8Z1M2Q9LA":100000,
+"Q1L9X2Z8MA":200000,"L9Z2M1X8QA":200000,"Z2Q1M9X8LA":200000,
+"M1X8Q2Z9LA":500000,"X2Z9M1Q8LA":500000,"Q9M2X1L8ZA":500000
+};
+
+// ===== nạp =====
+function napCode(){
+let c=code.value.trim();
+if(codes[c]){
+let m=getMoney()+codes[c];
+setMoney(m);
+update();
+alert("+"+codes[c]+"đ");
+delete codes[c];
+}else alert("Sai hoặc đã dùng");
+}
+</script>
+
+</body>
+</html>
